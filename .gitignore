@@ -1,0 +1,10 @@
+# Fichiers générés par Python
+__pycache__/
+*.pyc
+
+
+# Fichiers générés par l'exécution du code
+new_data/
+
+# Dossiers spécifiques à l'environnement virtuel
+venv/

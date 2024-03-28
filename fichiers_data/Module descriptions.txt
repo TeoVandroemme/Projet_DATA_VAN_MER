@@ -1,0 +1,24 @@
+1 - Files starting with 'Cap' are part of the capman modules that have a 30 seconds sampling (one sample every 30s) period and the moxs sensors (7 total) are:
+	- 'MICS27141_mV_'	'MICS27142_mV_'	'MICS5524COV_mV_'	'GGS1430COV_mV_'	'CCS801COV_mV_'	'TGS2620COV_mV_'	'MP901COV_mV_'	'TGS2610COV_mV_';
+
+
+2 - Files starting with 'Mod' are part of the new libelium modules that have a 4 seconds sampling period and the moxs sensors (6 total) are:
+	- 'TGS4161'	'MICS2714'	'TGS2442'	'MICS5524'	'TGS2602'	'TGS2620';
+
+
+3 - Files starting with 'ooeil' are part of the CozyAir modules that have a 10 minutes sampling period and the moxs sensors (3 total) are:
+	- 'cov'	'no2'	'ozone'
+	- cov = TGS 2620;	no2 = MICS 2714;	ozone = MICS 2714 + filter
+
+
+4 - Files starting with 'pianoThick' are part of the Piano Thick modules that have a 10 seconds sampling period and the moxs sensors (9 total) are:
+	- 'piano_TGS2603I00'	'piano_TGS2620I00'	'piano_COM31I00'	'piano_H2SM31I00'	'piano_VOCM31I00'	'piano_TGS2600I00'	'piano_TGS2602I00'	'piano_SB5100I00'	'piano_SBAQ106I00'
+
+
+5 - Files starting with 'pianoThin' are part of the Piano Thin modules that have a 10 seconds sampling period and the moxs sensors (10 total) are:
+	- 'piano_GM102BI00'	'piano_GM302BI00'	'piano_GM402BI00'	'piano_GM502BI00'	'piano_GM602BI00'	'piano_GM702BI00'	'piano_GM802BI00'	'piano_MICS5524I00'	'piano_MICS2714I00'	'piano_MICS5914I00'
+
+
+6 - Files starting with 'pod' are part of the Pods modules that have a 10 seconds sampling period and the moxs sensors (4 total) are:
+	- 'mox1'	'mox2'	'mox3'	'mox4'
+	- Mox1 = MICS 5524;	Mox2 = MICS 5914;	Mox3 = CCS 801;	Mox4 = TGS8100.
