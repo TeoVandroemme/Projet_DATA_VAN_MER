@@ -163,101 +163,95 @@ nb_colonnes_pod88_concatenated = pod88.shape[1]
 # Afficher le nombre de colonnes pour le module POD88
 print("Le nombre de colonnes dans pod88_concatenated est :", nb_colonnes_pod88_concatenated)
 
-# File paths for PICO data
+# Chemin vers les fichiers de données pour PICO
 pico_paths = ["fichiers_data/Piano/14_nov-22_nov-Piano/IMT_PICO.csv",
               "fichiers_data/Piano/23_nov-12_dec-Piano/IMT_PICO.csv",
               "fichiers_data/Piano/fevrier_mars_2023_piano/IMT_PICO.csv"]
 
-# Concatenate and process PICO data
-for i, pico_path in enumerate(pico_paths, start=1):
-    # Read data, skip unnecessary rows, rename columns, and convert 'date' column to datetime
-    pico_data = pd.read_csv(pico_path, sep=";", skiprows=[1, 2, 3, 4])
-    # Supprimer les colonnes inutiles et renommer la colonne 'date' en 'Time'
-    pico_data = pico_data.drop(columns=[col for col in pico_data.columns if
-                                        'aqi' in col or 'qai' in col or 'iaq' in col or col == 'element' or 'Unnamed' in col])
-    pico_data = pico_data.rename(columns={'date': 'Time'})
-    pico_data['Time'] = pd.to_datetime(pico_data['Time'])
+# Concaténer et traiter les données PICO
+pico_concatenated = pd.concat([pd.read_csv(file, sep=";", skiprows=[1, 2, 3, 4]) for file in pico_paths])
 
-    # Remove duplicates
-    pico_data.drop_duplicates(inplace=True)
+# Supprimer les doublons
+pico_concatenated.drop_duplicates(inplace=True)
 
-    # Save processed data to CSV
-    pico_data.to_csv(f"new_data/PICO_{i}_concatenated.csv", index=False)
+# Supprimer les colonnes inutiles et renommer la colonne 'date' en 'Time'
+columns_to_keep_pico = [col for col in pico_concatenated.columns if
+                        'aqi' not in col and 'qai' not in col and 'iaq' not in col and 'element' not in col and 'Unnamed' not in col]
+pico_concatenated = pico_concatenated[columns_to_keep_pico]
+pico_concatenated = pico_concatenated.rename(columns={'date': 'Time'})
+pico_concatenated['Time'] = pd.to_datetime(pico_concatenated['Time'])
 
-# Compter le nombre de lignes dans pico_data_concatenated
-nb_lignes_pico_concatenated = pico_data.shape[0]
+# Sauvegarder les données concaténées dans un fichier CSV unique pour PICO
+pico_concatenated.to_csv("new_data/PICO_concatenated.csv", index=False)
 
-# Afficher le nombre de lignes pour le module PICO
-print("Le nombre de lignes dans pico_data_concatenated est :", nb_lignes_pico_concatenated)
-
-# Compter le nombre de colonnes dans pico_data_concatenated
-nb_colonnes_pico_concatenated = pico_data.shape[1]
-
-# Afficher le nombre de colonnes pour le module PICO
-print("Le nombre de colonnes dans pico_data_concatenated est :", nb_colonnes_pico_concatenated)
-
-# File paths for Thick data
-thick_paths = ["fichiers_data/Piano/14_nov-22_nov-Piano/IMT_Thick.csv",
-              "fichiers_data/Piano/23_nov-12_dec-Piano/IMT_Thick.csv",
-              "fichiers_data/Piano/fevrier_mars_2023_piano/IMT_Thick.csv"]
-
-# Concatenate and process Thick data
-for i, thick_path in enumerate(thick_paths, start=1):
-    # Read data, skip unnecessary rows, rename columns, and convert 'date' column to datetime
-    thick_data = pd.read_csv(thick_path, sep=";", skiprows=[1, 2, 3, 4])
-    # Supprimer les colonnes inutiles et renommer la colonne 'date' en 'Time'
-    thick_data = thick_data.drop(columns=[col for col in thick_data.columns if
-                                        'aqi' in col or 'qai' in col or 'iaq' in col or col == 'element' or 'Unnamed' in col])
-    thick_data = thick_data.rename(columns={'date': 'Time'})
-    thick_data['Time'] = pd.to_datetime(thick_data['Time'])
-
-    # Remove duplicates
-    thick_data.drop_duplicates(inplace=True)
-
-    # Save processed data to CSV
-    thick_data.to_csv(f"new_data/Thick_{i}_concatenated.csv", index=False)
-
-# Compter le nombre de lignes dans thick_data_concatenated
-nb_lignes_thick_concatenated = thick_data.shape[0]
-
-# Afficher le nombre de lignes pour le module Thick
-print("Le nombre de lignes dans thick_data_concatenated est :", nb_lignes_thick_concatenated)
-
-# Compter le nombre de colonnes dans thick_data_concatenated
-nb_colonnes_thick_concatenated = thick_data.shape[1]
-
-# Afficher le nombre de colonnes pour le module Thick
-print("Le nombre de colonnes dans thick_data_concatenated est :", nb_colonnes_thick_concatenated)
-
-# File paths for Thin data
+# Chemin vers les fichiers de données pour THIN
 thin_paths = ["fichiers_data/Piano/14_nov-22_nov-Piano/IMT_Thin.csv",
               "fichiers_data/Piano/23_nov-12_dec-Piano/IMT_Thin.csv",
               "fichiers_data/Piano/fevrier_mars_2023_piano/IMT_Thin.csv"]
 
-# Concatenate and process Thin data
-for i, thin_path in enumerate(thin_paths, start=1):
-    # Read data, skip unnecessary rows, rename columns, and convert 'date' column to datetime
-    thin_data = pd.read_csv(thin_path, sep=";", skiprows=[1, 2, 3, 4])
-    # Supprimer les colonnes inutiles et renommer la colonne 'date' en 'Time'
-    thin_data = thin_data.drop(columns=[col for col in thin_data.columns if
-                                        'aqi' in col or 'qai' in col or 'iaq' in col or col == 'element' or 'Unnamed' in col])
-    thin_data = thin_data.rename(columns={'date': 'Time'})
-    thin_data['Time'] = pd.to_datetime(thin_data['Time'])
+# Concaténer et traiter les données THIN
+thin_concatenated = pd.concat([pd.read_csv(file, sep=";", skiprows=[1, 2, 3, 4]) for file in thin_paths])
 
-    # Remove duplicates
-    thin_data.drop_duplicates(inplace=True)
+# Supprimer les doublons
+thin_concatenated.drop_duplicates(inplace=True)
 
-    # Save processed data to CSV
-    thin_data.to_csv(f"new_data/Thin_{i}_concatenated.csv", index=False)
+# Supprimer les colonnes inutiles et renommer la colonne 'date' en 'Time'
+columns_to_keep_thin = [col for col in thin_concatenated.columns if
+                        'aqi' not in col and 'qai' not in col and 'iaq' not in col and 'element' not in col and 'Unnamed' not in col]
+thin_concatenated = thin_concatenated[columns_to_keep_thin]
+thin_concatenated = thin_concatenated.rename(columns={'date': 'Time'})
+thin_concatenated['Time'] = pd.to_datetime(thin_concatenated['Time'])
 
-# Compter le nombre de lignes dans thin_data_concatenated
-nb_lignes_thin_concatenated = thin_data.shape[0]
+# Sauvegarder les données concaténées dans un fichier CSV unique pour THIN
+thin_concatenated.to_csv("new_data/THIN_concatenated.csv", index=False)
 
-# Afficher le nombre de lignes pour le module Thin
-print("Le nombre de lignes dans thin_data_concatenated est :", nb_lignes_thin_concatenated)
+# Chemin vers les fichiers de données pour THICK
+thick_paths = ["fichiers_data/Piano/14_nov-22_nov-Piano/IMT_Thick.csv",
+               "fichiers_data/Piano/23_nov-12_dec-Piano/IMT_Thick.csv",
+               "fichiers_data/Piano/fevrier_mars_2023_piano/IMT_Thick.csv"]
 
-# Compter le nombre de colonnes dans thin_data_concatenated
-nb_colonnes_thin_concatenated = thin_data.shape[1]
+# Concaténer et traiter les données THICK
+thick_concatenated = pd.concat([pd.read_csv(file, sep=";", skiprows=[1, 2, 3, 4]) for file in thick_paths])
 
-# Afficher le nombre de colonnes pour le module Thin
-print("Le nombre de colonnes dans thin_data_concatenated est :", nb_colonnes_thin_concatenated)
+# Supprimer les doublons
+thick_concatenated.drop_duplicates(inplace=True)
+
+# Supprimer les colonnes inutiles et renommer la colonne 'date' en 'Time'
+columns_to_keep_thick = [col for col in thick_concatenated.columns if
+                         'aqi' not in col and 'qai' not in col and 'iaq' not in col and 'element' not in col and 'Unnamed' not in col]
+thick_concatenated = thick_concatenated[columns_to_keep_thick]
+thick_concatenated = thick_concatenated.rename(columns={'date': 'Time'})
+thick_concatenated['Time'] = pd.to_datetime(thick_concatenated['Time'])
+
+# Sauvegarder les données concaténées dans un fichier CSV unique pour THICK
+thick_concatenated.to_csv("new_data/THICK_concatenated.csv", index=False)
+
+# Compter le nombre de lignes dans PICO_concatenated
+nb_lignes_pico_concatenated = pico_concatenated.shape[0]
+# Afficher le nombre de lignes pour PICO
+print("Le nombre de lignes dans PICO_concatenated est :", nb_lignes_pico_concatenated)
+
+# Compter le nombre de colonnes dans PICO_concatenated
+nb_colonnes_pico_concatenated = pico_concatenated.shape[1]
+# Afficher le nombre de colonnes pour PICO
+print("Le nombre de colonnes dans PICO_concatenated est :", nb_colonnes_pico_concatenated)
+
+# Compter le nombre de lignes dans THIN_concatenated
+nb_lignes_thin_concatenated = thin_concatenated.shape[0]
+# Afficher le nombre de lignes pour THIN
+print("Le nombre de lignes dans THIN_concatenated est :", nb_lignes_thin_concatenated)
+
+# Compter le nombre de colonnes dans THIN_concatenated
+nb_colonnes_thin_concatenated = thin_concatenated.shape[1]
+# Afficher le nombre de colonnes pour THIN
+print("Le nombre de colonnes dans THIN_concatenated est :", nb_colonnes_thin_concatenated)
+
+# Compter le nombre de lignes dans THICK_concatenated
+nb_lignes_thick_concatenated = thick_concatenated.shape[0]
+# Afficher le nombre de lignes pour THICK
+print("Le nombre de lignes dans THICK_concatenated est :", nb_lignes_thick_concatenated)
+
+# Compter le nombre de colonnes dans THICK_concatenated
+nb_colonnes_thick_concatenated = thick_concatenated.shape[1]
+# Afficher le nombre de colonnes pour THICK
+print("Le nombre de colonnes dans THICK_concatenated est :", nb_colonnes_thick_concatenated)
