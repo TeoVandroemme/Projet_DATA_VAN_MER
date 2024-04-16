@@ -1,6 +1,4 @@
 import pandas as pd
-import matplotlib.pyplot as plt
-import matplotlib.dates as mdates
 
 # Chemin vers les fichiers de données pour mod1 et mod2
 mod1_files = ["fichiers_data/Libelium New/part1/mod1.txt",
@@ -69,11 +67,9 @@ nb_colonnes_mod2_concatenated = mod2_concatenated.shape[1]
 # Afficher le nombre de colonnes mod2
 print("Le nombre de colonnes dans mod2_concatenated est :", nb_colonnes_mod2_concatenated)
 
-pod85_paths = [
-    "fichiers_data/PODs/14_nov-22_nov-Pods/POD200085.csv",
-    "fichiers_data/PODs/23_nov-12_dec-Pods/POD200085.csv",
-    "fichiers_data/PODs/fevrier_mars_pods/POD200085.csv"
-]
+pod85_paths = ["fichiers_data/PODs/14_nov-22_nov-Pods/POD200085.csv",
+               "fichiers_data/PODs/23_nov-12_dec-Pods/POD200085.csv",
+               "fichiers_data/PODs/fevrier_mars_2023_pods/POD200085.csv"]
 
 # Concaténer les fichiers pour chaque module POD85
 pod85 = pd.concat([pd.read_csv(file, sep=";", skiprows=[1, 2, 3, 4]) for file in pod85_paths])
@@ -82,7 +78,7 @@ pod85 = pd.concat([pd.read_csv(file, sep=";", skiprows=[1, 2, 3, 4]) for file in
 pod85.drop_duplicates(inplace=True)
 
 # Supprimer les colonnes inutiles et renommer la colonne 'date' en 'Time'
-pod85 = pod85.drop(columns=['element', 'aqi', 'Unnamed: 0'])
+pod85 = pod85.drop(columns=['element', 'aqi'])
 pod85 = pod85.rename(columns={'date': 'Time'})
 
 # Convertir la colonne 'Time' en datetime
@@ -91,11 +87,9 @@ pod85['Time'] = pd.to_datetime(pod85['Time'])
 # Sauvegarder les données traitées dans un fichier CSV unique pour chaque module POD85
 pod85.to_csv(f"new_data/POD_85_concatenated.csv", index=False)
 
-pod86_paths = [
-    "fichiers_data/PODs/14_nov-22_nov-Pods/POD200086.csv",
-    "fichiers_data/PODs/23_nov-12_dec-Pods/POD200086.csv",
-    "fichiers_data/PODs/fevrier_mars_pods/POD200086.csv"
-]
+pod86_paths = ["fichiers_data/PODs/14_nov-22_nov-Pods/POD200086.csv",
+               "fichiers_data/PODs/23_nov-12_dec-Pods/POD200086.csv",
+               "fichiers_data/PODs/fevrier_mars_2023_pods/POD200086.csv"]
 
 # Concaténer les fichiers pour chaque module POD86
 pod86 = pd.concat([pd.read_csv(file, sep=";", skiprows=[1, 2, 3, 4]) for file in pod86_paths])
@@ -104,7 +98,7 @@ pod86 = pd.concat([pd.read_csv(file, sep=";", skiprows=[1, 2, 3, 4]) for file in
 pod86.drop_duplicates(inplace=True)
 
 # Supprimer les colonnes inutiles et renommer la colonne 'date' en 'Time'
-pod86 = pod86.drop(columns=['element', 'aqi', 'Unnamed: 0'])
+pod86 = pod86.drop(columns=['element', 'aqi'])
 pod86 = pod86.rename(columns={'date': 'Time'})
 
 # Convertir la colonne 'Time' en datetime
@@ -113,11 +107,9 @@ pod86['Time'] = pd.to_datetime(pod86['Time'])
 # Sauvegarder les données traitées dans un fichier CSV unique pour chaque module POD86
 pod86.to_csv(f"new_data/POD_86_concatenated.csv", index=False)
 
-pod88_paths = [
-    "fichiers_data/PODs/14_nov-22_nov-Pods/POD200088.csv",
-    "fichiers_data/PODs/23_nov-12_dec-Pods/POD200088.csv",
-    "fichiers_data/PODs/fevrier_mars_pods/POD200088.csv"
-]
+pod88_paths = ["fichiers_data/PODs/14_nov-22_nov-Pods/POD200088.csv",
+               "fichiers_data/PODs/23_nov-12_dec-Pods/POD200088.csv",
+               "fichiers_data/PODs/fevrier_mars_2023_pods/POD200088.csv"]
 
 # Concaténer les fichiers pour chaque module POD88
 pod88 = pd.concat([pd.read_csv(file, sep=";", skiprows=[1, 2, 3, 4]) for file in pod88_paths])
@@ -126,7 +118,7 @@ pod88 = pd.concat([pd.read_csv(file, sep=";", skiprows=[1, 2, 3, 4]) for file in
 pod88.drop_duplicates(inplace=True)
 
 # Supprimer les colonnes inutiles et renommer la colonne 'date' en 'Time'
-pod88 = pod88.drop(columns=['element', 'aqi', 'Unnamed: 0'])
+pod88 = pod88.drop(columns=['element', 'aqi'])
 pod88 = pod88.rename(columns={'date': 'Time'})
 
 # Convertir la colonne 'Time' en datetime
@@ -172,16 +164,15 @@ nb_colonnes_pod88_concatenated = pod88.shape[1]
 print("Le nombre de colonnes dans pod88_concatenated est :", nb_colonnes_pod88_concatenated)
 
 # File paths for PICO data
-pico_paths = [
-    "fichiers_data/Piano/14_nov-22_nov-Piano/IMT_PICO.csv",
-    "fichiers_data/Piano/23_nov-12_dec-Piano/IMT_PICO.csv",
-    "fichiers_data/Piano/fevrier_mars_2023_piano/IMT_PICO.csv"
-]
+pico_paths = ["fichiers_data/Piano/14_nov-22_nov-Piano/IMT_PICO.csv",
+              "fichiers_data/Piano/23_nov-12_dec-Piano/IMT_PICO.csv",
+              "fichiers_data/Piano/fevrier_mars_2023_piano/IMT_PICO.csv"]
 
 # Concatenate and process PICO data
 for i, pico_path in enumerate(pico_paths, start=1):
     # Read data, skip unnecessary rows, rename columns, and convert 'date' column to datetime
     pico_data = pd.read_csv(pico_path, sep=";", skiprows=[1, 2, 3, 4])
+    # Supprimer les colonnes inutiles et renommer la colonne 'date' en 'Time'
     pico_data = pico_data.drop(columns=[col for col in pico_data.columns if
                                         'aqi' in col or 'qai' in col or 'iaq' in col or col == 'element' or 'Unnamed' in col])
     pico_data = pico_data.rename(columns={'date': 'Time'})
@@ -205,31 +196,68 @@ nb_colonnes_pico_concatenated = pico_data.shape[1]
 # Afficher le nombre de colonnes pour le module PICO
 print("Le nombre de colonnes dans pico_data_concatenated est :", nb_colonnes_pico_concatenated)
 
+# File paths for Thick data
+thick_paths = ["fichiers_data/Piano/14_nov-22_nov-Piano/IMT_Thick.csv",
+              "fichiers_data/Piano/23_nov-12_dec-Piano/IMT_Thick.csv",
+              "fichiers_data/Piano/fevrier_mars_2023_piano/IMT_Thick.csv"]
 
-# The code:
-# plt.figure(figsize=(10, 2))  # Plot overview of the files
-# date_format = mdates.DateFormatter('%d-%b')
+# Concatenate and process Thick data
+for i, thick_path in enumerate(thick_paths, start=1):
+    # Read data, skip unnecessary rows, rename columns, and convert 'date' column to datetime
+    thick_data = pd.read_csv(thick_path, sep=";", skiprows=[1, 2, 3, 4])
+    # Supprimer les colonnes inutiles et renommer la colonne 'date' en 'Time'
+    thick_data = thick_data.drop(columns=[col for col in thick_data.columns if
+                                        'aqi' in col or 'qai' in col or 'iaq' in col or col == 'element' or 'Unnamed' in col])
+    thick_data = thick_data.rename(columns={'date': 'Time'})
+    thick_data['Time'] = pd.to_datetime(thick_data['Time'])
 
-# plt.subplot(3, 2, 1)  # MOD1
-# plt.subplots_adjust(top=8)
-# plt.title("MOD1 (Temperature x Time)")
-# plt.plot(mod1_concatenated['Time'], mod1_concatenated['Temperature'])
-# plt.gca().xaxis.set_major_formatter(date_format)
-# plt.xticks(rotation=45)
+    # Remove duplicates
+    thick_data.drop_duplicates(inplace=True)
 
-# plt.subplot(3, 2, 2)  # MOD2
-# plt.subplots_adjust(top=8)
-# plt.title("MOD2 (Temperature x Time)")
-# plt.plot(mod2_concatenated['Time'], mod2_concatenated['Temperature'])
-# plt.gca().xaxis.set_major_formatter(date_format)
-# plt.xticks(rotation=45)
+    # Save processed data to CSV
+    thick_data.to_csv(f"new_data/Thick_{i}_concatenated.csv", index=False)
 
-# Plot pour POD 200085
-# plt.subplot(3, 1, 1)
-# plt.title("POD 200085 (Temperature x Time)")
-# plt.plot(POD_85_concatenated['Time'], POD_85_concatenated['Temperature'])
-# plt.gca().xaxis.set_major_formatter(date_format)
-# plt.xticks(rotation=45)
+# Compter le nombre de lignes dans thick_data_concatenated
+nb_lignes_thick_concatenated = thick_data.shape[0]
 
-# Afficher les graphiques
-# plt.show()
+# Afficher le nombre de lignes pour le module Thick
+print("Le nombre de lignes dans thick_data_concatenated est :", nb_lignes_thick_concatenated)
+
+# Compter le nombre de colonnes dans thick_data_concatenated
+nb_colonnes_thick_concatenated = thick_data.shape[1]
+
+# Afficher le nombre de colonnes pour le module Thick
+print("Le nombre de colonnes dans thick_data_concatenated est :", nb_colonnes_thick_concatenated)
+
+# File paths for Thin data
+thin_paths = ["fichiers_data/Piano/14_nov-22_nov-Piano/IMT_Thin.csv",
+              "fichiers_data/Piano/23_nov-12_dec-Piano/IMT_Thin.csv",
+              "fichiers_data/Piano/fevrier_mars_2023_piano/IMT_Thin.csv"]
+
+# Concatenate and process Thin data
+for i, thin_path in enumerate(thin_paths, start=1):
+    # Read data, skip unnecessary rows, rename columns, and convert 'date' column to datetime
+    thin_data = pd.read_csv(thin_path, sep=";", skiprows=[1, 2, 3, 4])
+    # Supprimer les colonnes inutiles et renommer la colonne 'date' en 'Time'
+    thin_data = thin_data.drop(columns=[col for col in thin_data.columns if
+                                        'aqi' in col or 'qai' in col or 'iaq' in col or col == 'element' or 'Unnamed' in col])
+    thin_data = thin_data.rename(columns={'date': 'Time'})
+    thin_data['Time'] = pd.to_datetime(thin_data['Time'])
+
+    # Remove duplicates
+    thin_data.drop_duplicates(inplace=True)
+
+    # Save processed data to CSV
+    thin_data.to_csv(f"new_data/Thin_{i}_concatenated.csv", index=False)
+
+# Compter le nombre de lignes dans thin_data_concatenated
+nb_lignes_thin_concatenated = thin_data.shape[0]
+
+# Afficher le nombre de lignes pour le module Thin
+print("Le nombre de lignes dans thin_data_concatenated est :", nb_lignes_thin_concatenated)
+
+# Compter le nombre de colonnes dans thin_data_concatenated
+nb_colonnes_thin_concatenated = thin_data.shape[1]
+
+# Afficher le nombre de colonnes pour le module Thin
+print("Le nombre de colonnes dans thin_data_concatenated est :", nb_colonnes_thin_concatenated)
