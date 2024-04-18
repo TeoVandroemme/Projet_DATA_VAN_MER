@@ -46,26 +46,13 @@ mod2_concatenated.to_csv("new_data/mod2_concatenated.txt", sep='\t', index=False
 # Compter le nombre de lignes dans mod1_concatenated
 nb_lignes_mod1_concatenated = mod1_concatenated.shape[0]
 
-# Afficher le nombre de lignes mod1
-print("Le nombre de lignes dans mod1_concatenated est :", nb_lignes_mod1_concatenated)
+# Informations sur le module mod1
+nb_lignes_mod1_concatenated, nb_colonnes_mod1_concatenated = mod1_concatenated.shape
+print(f"mod1 => Colonnes : {nb_colonnes_mod1_concatenated} \t Lignes : {nb_lignes_mod1_concatenated}")
 
-# Compter le nombre de colonnes dans mod1_concatenated
-nb_colonnes_mod1_concatenated = mod1_concatenated.shape[1]
-
-# Afficher le nombre de colonnes mod1
-print("Le nombre de colonnes dans mod1_concatenated est :", nb_colonnes_mod1_concatenated)
-
-# Compter le nombre de lignes dans mod2_concatenated
-nb_lignes_mod2_concatenated = mod2_concatenated.shape[0]
-
-# Afficher le nombre de lignes mod2
-print("Le nombre de lignes dans mod2_concatenated est :", nb_lignes_mod2_concatenated)
-
-# Compter le nombre de colonnes dans mod2_concatenated
-nb_colonnes_mod2_concatenated = mod2_concatenated.shape[1]
-
-# Afficher le nombre de colonnes mod2
-print("Le nombre de colonnes dans mod2_concatenated est :", nb_colonnes_mod2_concatenated)
+# Informations sur le module mod2
+nb_lignes_mod2_concatenated, nb_colonnes_mod2_concatenated = mod2_concatenated.shape
+print(f"mod2 => Colonnes : {nb_colonnes_mod2_concatenated} \t Lignes : {nb_lignes_mod2_concatenated}")
 
 pod85_paths = ["fichiers_data/PODs/14_nov-22_nov-Pods/POD200085.csv",
                "fichiers_data/PODs/23_nov-12_dec-Pods/POD200085.csv",
@@ -78,7 +65,7 @@ pod85 = pd.concat([pd.read_csv(file, sep=";", skiprows=[1, 2, 3, 4]) for file in
 pod85.drop_duplicates(inplace=True)
 
 # Supprimer les colonnes inutiles et renommer la colonne 'date' en 'Time'
-pod85 = pod85.drop(columns=['element', 'aqi'])
+pod85 = pod85.drop(columns=['element', 'aqi', 'Unnamed: 14'])
 pod85 = pod85.rename(columns={'date': 'Time'})
 
 # Convertir la colonne 'Time' en datetime
@@ -98,7 +85,7 @@ pod86 = pd.concat([pd.read_csv(file, sep=";", skiprows=[1, 2, 3, 4]) for file in
 pod86.drop_duplicates(inplace=True)
 
 # Supprimer les colonnes inutiles et renommer la colonne 'date' en 'Time'
-pod86 = pod86.drop(columns=['element', 'aqi'])
+pod86 = pod86.drop(columns=['element', 'aqi', 'Unnamed: 14'])
 pod86 = pod86.rename(columns={'date': 'Time'})
 
 # Convertir la colonne 'Time' en datetime
@@ -118,7 +105,7 @@ pod88 = pd.concat([pd.read_csv(file, sep=";", skiprows=[1, 2, 3, 4]) for file in
 pod88.drop_duplicates(inplace=True)
 
 # Supprimer les colonnes inutiles et renommer la colonne 'date' en 'Time'
-pod88 = pod88.drop(columns=['element', 'aqi'])
+pod88 = pod88.drop(columns=['element', 'aqi', 'Unnamed: 14'])
 pod88 = pod88.rename(columns={'date': 'Time'})
 
 # Convertir la colonne 'Time' en datetime
@@ -130,38 +117,17 @@ pod88.to_csv(f"new_data/POD_88_concatenated.csv", index=False)
 # Compter le nombre de lignes dans pod85_concatenated
 nb_lignes_pod85_concatenated = pod85.shape[0]
 
-# Afficher le nombre de lignes pour le module POD85
-print("Le nombre de lignes dans pod85_concatenated est :", nb_lignes_pod85_concatenated)
+# Informations sur le module POD85
+nb_lignes_pod85_concatenated, nb_colonnes_pod85_concatenated = pod85.shape
+print(f"POD85 => Colonnes : {nb_colonnes_pod85_concatenated} \t Lignes : {nb_lignes_pod85_concatenated}")
 
-# Compter le nombre de colonnes dans pod85_concatenated
-nb_colonnes_pod85_concatenated = pod85.shape[1]
+# Informations sur le module POD86
+nb_lignes_pod86_concatenated, nb_colonnes_pod86_concatenated = pod86.shape
+print(f"POD86 => Colonnes : {nb_colonnes_pod86_concatenated} \t Lignes : {nb_lignes_pod86_concatenated}")
 
-# Afficher le nombre de colonnes pour le module POD85
-print("Le nombre de colonnes dans pod85_concatenated est :", nb_colonnes_pod85_concatenated)
-
-# Compter le nombre de lignes dans pod86_concatenated
-nb_lignes_pod86_concatenated = pod86.shape[0]
-
-# Afficher le nombre de lignes pour le module POD86
-print("Le nombre de lignes dans pod86_concatenated est :", nb_lignes_pod86_concatenated)
-
-# Compter le nombre de colonnes dans pod86_concatenated
-nb_colonnes_pod86_concatenated = pod86.shape[1]
-
-# Afficher le nombre de colonnes pour le module POD86
-print("Le nombre de colonnes dans pod86_concatenated est :", nb_colonnes_pod86_concatenated)
-
-# Compter le nombre de lignes dans pod88_concatenated
-nb_lignes_pod88_concatenated = pod88.shape[0]
-
-# Afficher le nombre de lignes pour le module POD88
-print("Le nombre de lignes dans pod88_concatenated est :", nb_lignes_pod88_concatenated)
-
-# Compter le nombre de colonnes dans pod88_concatenated
-nb_colonnes_pod88_concatenated = pod88.shape[1]
-
-# Afficher le nombre de colonnes pour le module POD88
-print("Le nombre de colonnes dans pod88_concatenated est :", nb_colonnes_pod88_concatenated)
+# Informations sur le module POD88
+nb_lignes_pod88_concatenated, nb_colonnes_pod88_concatenated = pod88.shape
+print(f"POD88 => Colonnes : {nb_colonnes_pod88_concatenated} \t Lignes : {nb_lignes_pod88_concatenated}")
 
 # Chemin vers les fichiers de données pour PICO
 pico_paths = ["fichiers_data/Piano/14_nov-22_nov-Piano/IMT_PICO.csv",
@@ -226,32 +192,14 @@ thick_concatenated['Time'] = pd.to_datetime(thick_concatenated['Time'])
 # Sauvegarder les données concaténées dans un fichier CSV unique pour THICK
 thick_concatenated.to_csv("new_data/THICK_concatenated.csv", index=False)
 
-# Compter le nombre de lignes dans PICO_concatenated
-nb_lignes_pico_concatenated = pico_concatenated.shape[0]
-# Afficher le nombre de lignes pour PICO
-print("Le nombre de lignes dans PICO_concatenated est :", nb_lignes_pico_concatenated)
+# Informations sur le module PICO
+nb_lignes_pico_concatenated, nb_colonnes_pico_concatenated = pico_concatenated.shape
+print(f"PICO => Colonnes : {nb_colonnes_pico_concatenated} \t Lignes : {nb_lignes_pico_concatenated}")
 
-# Compter le nombre de colonnes dans PICO_concatenated
-nb_colonnes_pico_concatenated = pico_concatenated.shape[1]
-# Afficher le nombre de colonnes pour PICO
-print("Le nombre de colonnes dans PICO_concatenated est :", nb_colonnes_pico_concatenated)
+# Informations sur le module THIN
+nb_lignes_thin_concatenated, nb_colonnes_thin_concatenated = thin_concatenated.shape
+print(f"THIN => Colonnes : {nb_colonnes_thin_concatenated} \t Lignes : {nb_lignes_thin_concatenated}")
 
-# Compter le nombre de lignes dans THIN_concatenated
-nb_lignes_thin_concatenated = thin_concatenated.shape[0]
-# Afficher le nombre de lignes pour THIN
-print("Le nombre de lignes dans THIN_concatenated est :", nb_lignes_thin_concatenated)
-
-# Compter le nombre de colonnes dans THIN_concatenated
-nb_colonnes_thin_concatenated = thin_concatenated.shape[1]
-# Afficher le nombre de colonnes pour THIN
-print("Le nombre de colonnes dans THIN_concatenated est :", nb_colonnes_thin_concatenated)
-
-# Compter le nombre de lignes dans THICK_concatenated
-nb_lignes_thick_concatenated = thick_concatenated.shape[0]
-# Afficher le nombre de lignes pour THICK
-print("Le nombre de lignes dans THICK_concatenated est :", nb_lignes_thick_concatenated)
-
-# Compter le nombre de colonnes dans THICK_concatenated
-nb_colonnes_thick_concatenated = thick_concatenated.shape[1]
-# Afficher le nombre de colonnes pour THICK
-print("Le nombre de colonnes dans THICK_concatenated est :", nb_colonnes_thick_concatenated)
+# Informations sur le module THICK
+nb_lignes_thick_concatenated, nb_colonnes_thick_concatenated = thick_concatenated.shape
+print(f"THICK => Colonnes : {nb_colonnes_thick_concatenated} \t Lignes : {nb_lignes_thick_concatenated}")
