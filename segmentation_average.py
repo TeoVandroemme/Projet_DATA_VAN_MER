@@ -118,3 +118,33 @@ print("Longueur de SdB :", len_SdB)
 print("Longueur de BricoP :", len_BricoP)
 print("Longueur de BricoC :", len_BricoC)
 print("Longueur de Oeuf :", len_Oeuf)
+
+
+def averageSignature(activity_instances, avg_length):
+    interpolated_instances = []
+
+    # Parcourir chaque instance d'activité
+    for instance in activity_instances:
+        # Assurer que l'instance est un DataFrame avec un index temporel
+        instance['Time'] = pd.date_range(start=instance.index.min(), end=instance.index.max(), periods=len(instance))
+        instance.set_index('Time', inplace=True)
+
+        # Interpoler les données
+        interpolated_instance = instance.resample(str(avg_length) + 'S').interpolate()
+
+        interpolated_instances.append(interpolated_instance)
+
+    # Concaténer les instances interpolées
+    instances_df = pd.concat(interpolated_instances, axis=1)
+
+    # Calculer la moyenne à travers toutes les instances
+    avg_signature = instances_df.mean(axis=1)
+
+    return avg_signature
+
+
+avgAS1 = averageSignature(AS1_grouped, len_AS1)
+print(avgAS1)
+
+
+
