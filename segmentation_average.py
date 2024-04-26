@@ -20,10 +20,11 @@ activity_df['Started'] = pd.to_datetime(activity_df['Started']).dt.tz_localize('
 activity_df['Ended'] = pd.to_datetime(activity_df['Ended']).dt.tz_localize('UTC').dt.tz_convert('UTC+01:00')
 
 # Supprimer les colonnes non nécessaires et les valeurs NaN
-new_activity_df = activity_df.drop(columns=['Comments', 'Unnamed: 4', 'Unnamed: 5', 'Unnamed: 6', 'Unnamed: 7']).dropna()
+new_activity_df = activity_df.drop(
+    columns=['Comments', 'Unnamed: 4', 'Unnamed: 5', 'Unnamed: 6', 'Unnamed: 7']).dropna()
 
 # Supprimer les lignes contenant des valeurs NaN
-new_activity_df = new_activity_df.dropna(ignore_index = True)
+new_activity_df = new_activity_df.dropna(ignore_index=True)
 
 # Vérifier à nouveau les types de données dans le DataFrame
 print("Types de données dans le dataframe des activités après nettoyage :")
@@ -44,7 +45,6 @@ SdB_grouped = []
 BricoP_grouped = []
 BricoC_grouped = []
 Oeuf_grouped = []
-# Ajoutez autant de listes que nécessaire pour chaque activité
 
 # Créer des variables pour suivre la longueur de chaque activité
 len_Saber = 0
@@ -57,7 +57,6 @@ len_SdB = 0
 len_BricoP = 0
 len_BricoC = 0
 len_Oeuf = 0
-# Ajoutez autant de variables que nécessaire pour chaque activité
 
 # Parcourir les activités dans le calendrier
 for idact, act in enumerate(new_activity_df['activity']):
@@ -66,43 +65,53 @@ for idact, act in enumerate(new_activity_df['activity']):
 
     # Segmenter la base de données en fonction de chaque activité
     if act == 'Saber':
-        segment = base[(base['Time'] >= start) & (base['Time'] <= end)].reset_index(drop=True).sort_values(by='Time').drop(columns='Time')
+        segment = base[(base['Time'] >= start) & (base['Time'] <= end)].reset_index(drop=True).sort_values(
+            by='Time').drop(columns='Time')
         len_Saber += len(segment)
         Saber_grouped.append(segment)
     elif act == 'Aera':
-        segment = base[(base['Time'] >= start) & (base['Time'] <= end)].reset_index(drop=True).sort_values(by='Time').drop(columns='Time')
+        segment = base[(base['Time'] >= start) & (base['Time'] <= end)].reset_index(drop=True).sort_values(
+            by='Time').drop(columns='Time')
         len_Aera += len(segment)
         Aera_grouped.append(segment)
     elif act == 'Nett':
-        segment = base[(base['Time'] >= start) & (base['Time'] <= end)].reset_index(drop=True).sort_values(by='Time').drop(columns='Time')
+        segment = base[(base['Time'] >= start) & (base['Time'] <= end)].reset_index(drop=True).sort_values(
+            by='Time').drop(columns='Time')
         len_Nett += len(segment)
         Nett_grouped.append(segment)
     elif act == 'Asp':
-        segment = base[(base['Time'] >= start) & (base['Time'] <= end)].reset_index(drop=True).sort_values(by='Time').drop(columns='Time')
+        segment = base[(base['Time'] >= start) & (base['Time'] <= end)].reset_index(drop=True).sort_values(
+            by='Time').drop(columns='Time')
         len_Asp += len(segment)
         Asp_grouped.append(segment)
     elif act == 'AS1':
-        segment = base[(base['Time'] >= start) & (base['Time'] <= end)].reset_index(drop=True).sort_values(by='Time').drop(columns='Time')
+        segment = base[(base['Time'] >= start) & (base['Time'] <= end)].reset_index(drop=True).sort_values(
+            by='Time').drop(columns='Time')
         len_AS1 += len(segment)
         AS1_grouped.append(segment)
     elif act == 'Bougie':
-        segment = base[(base['Time'] >= start) & (base['Time'] <= end)].reset_index(drop=True).sort_values(by='Time').drop(columns='Time')
+        segment = base[(base['Time'] >= start) & (base['Time'] <= end)].reset_index(drop=True).sort_values(
+            by='Time').drop(columns='Time')
         len_Bougie += len(segment)
         Bougie_grouped.append(segment)
     elif act == 'SdB':
-        segment = base[(base['Time'] >= start) & (base['Time'] <= end)].reset_index(drop=True).sort_values(by='Time').drop(columns='Time')
+        segment = base[(base['Time'] >= start) & (base['Time'] <= end)].reset_index(drop=True).sort_values(
+            by='Time').drop(columns='Time')
         len_SdB += len(segment)
         SdB_grouped.append(segment)
     elif act == 'BricoP':
-        segment = base[(base['Time'] >= start) & (base['Time'] <= end)].reset_index(drop=True).sort_values(by='Time').drop(columns='Time')
+        segment = base[(base['Time'] >= start) & (base['Time'] <= end)].reset_index(drop=True).sort_values(
+            by='Time').drop(columns='Time')
         len_BricoP += len(segment)
         BricoP_grouped.append(segment)
     elif act == 'BricoC':
-        segment = base[(base['Time'] >= start) & (base['Time'] <= end)].reset_index(drop=True).sort_values(by='Time').drop(columns='Time')
+        segment = base[(base['Time'] >= start) & (base['Time'] <= end)].reset_index(drop=True).sort_values(
+            by='Time').drop(columns='Time')
         len_BricoC += len(segment)
         BricoC_grouped.append(segment)
     elif act == 'Oeuf':
-        segment = base[(base['Time'] >= start) & (base['Time'] <= end)].reset_index(drop=True).sort_values(by='Time').drop(columns='Time')
+        segment = base[(base['Time'] >= start) & (base['Time'] <= end)].reset_index(drop=True).sort_values(
+            by='Time').drop(columns='Time')
         len_Oeuf += len(segment)
         Oeuf_grouped.append(segment)
     # Ajoutez des clauses elif pour chaque activité supplémentaire
@@ -120,31 +129,84 @@ print("Longueur de BricoC :", len_BricoC)
 print("Longueur de Oeuf :", len_Oeuf)
 
 
-def averageSignature(activity_instances, avg_length):
-    interpolated_instances = []
+def averageSignature(activity_instances, num_instances):
+    min_length = min(
+        len(instance) for instance in activity_instances)  # Trouver la longueur minimale parmi toutes les instances
 
-    # Parcourir chaque instance d'activité
-    for instance in activity_instances:
-        # Assurer que l'instance est un DataFrame avec un index temporel
-        instance['Time'] = pd.date_range(start=instance.index.min(), end=instance.index.max(), periods=len(instance))
-        instance.set_index('Time', inplace=True)
+    avg_signature = []  # Initialiser la signature moyenne
 
-        # Interpoler les données
-        interpolated_instance = instance.resample(str(avg_length) + 'S').interpolate()
+    # Parcourir chaque ligne jusqu'à la longueur minimale
+    for i in range(min_length):
+        row_sum = np.zeros(activity_instances[0].shape[1])  # Initialiser la somme des valeurs de chaque colonne
 
-        interpolated_instances.append(interpolated_instance)
+        instance_count = 0  # Initialiser le nombre d'instances comptées pour cette ligne
 
-    # Concaténer les instances interpolées
-    instances_df = pd.concat(interpolated_instances, axis=1)
+        # Parcourir chaque instance d'activité
+        for instance in activity_instances:
+            row_sum += instance.iloc[i].values  # Ajouter les valeurs de la ligne à la somme
+            instance_count += 1  # Incrémenter le nombre d'instances comptées
 
-    # Calculer la moyenne à travers toutes les instances
-    avg_signature = instances_df.mean(axis=1)
+        # Calculer la moyenne des valeurs de chaque colonne pour cette ligne
+        avg_row = row_sum / instance_count
+        avg_signature.append(avg_row)  # Ajouter la moyenne au tableau de signature moyenne
 
-    return avg_signature
-
-
-avgAS1 = averageSignature(AS1_grouped, len_AS1)
-print(avgAS1)
+    return pd.DataFrame(avg_signature, columns=activity_instances[0].columns)
 
 
+# Utilisation de la fonction pour calculer la signature moyenne de chaque activité
+avg_Saber = averageSignature(Saber_grouped, len(Saber_grouped))
+avg_Aera = averageSignature(Aera_grouped, len(Aera_grouped))
+avg_Nett = averageSignature(Nett_grouped, len(Nett_grouped))
+avg_Asp = averageSignature(Asp_grouped, len(Asp_grouped))
+avg_AS1 = averageSignature(AS1_grouped, len(AS1_grouped))
+avg_Bougie = averageSignature(Bougie_grouped, len(Bougie_grouped))
+avg_SdB = averageSignature(SdB_grouped, len(SdB_grouped))
+avg_BricoP = averageSignature(BricoP_grouped, len(BricoP_grouped))
+avg_BricoC = averageSignature(BricoC_grouped, len(BricoC_grouped))
+avg_Oeuf = averageSignature(Oeuf_grouped, len(Oeuf_grouped))
 
+import matplotlib.pyplot as plt
+
+
+def plotSignature(activity_name, avg_signature):
+    plt.figure(figsize=(10, 6))
+    plt.plot(avg_signature, marker='o', linestyle='-')
+    plt.title("Average response of '{}'".format(activity_name))
+    plt.xlabel("Samples")
+    plt.ylabel("Sensors' measurements")
+    plt.grid(True)
+    plt.show()
+
+
+# Utilisation de la fonction pour tracer la signature moyenne de chaque activité
+plotSignature("Saber", avg_Saber)
+plotSignature("Aera", avg_Aera)
+plotSignature("Nett", avg_Nett)
+plotSignature("Asp", avg_Asp)
+plotSignature("AS1", avg_AS1)
+plotSignature("Bougie", avg_Bougie)
+plotSignature("SdB", avg_SdB)
+plotSignature("BricoP", avg_BricoP)
+plotSignature("BricoC", avg_BricoC)
+plotSignature("Oeuf", avg_Oeuf)
+
+# Création du jeu de données étiqueté
+labelled_dataset = pd.DataFrame()  # Initialiser un dataframe pour stocker le jeu de données étiqueté
+
+for idact, act in enumerate(new_activity_df['activity']):
+    start = new_activity_df['Started'][idact]
+    end = new_activity_df['Ended'][idact]
+
+    # Sélectionner les données correspondant à l'activité actuelle
+    activity_data = base[(base['Time'] >= start) & (base['Time'] <= end)].reset_index(drop=True).sort_values(
+        by='Time').drop(columns='Time')
+
+    # Ajouter une colonne 'label' contenant le numéro de l'activité
+    activity_data[
+        'label'] = idact + 1  # +1 car les numéros d'activité commencent à partir de 1 dans le fichier d'activités
+
+    # Ajouter les données de l'activité au jeu de données étiqueté
+    labelled_dataset = pd.concat([labelled_dataset, activity_data], ignore_index=True)
+
+# Enregistrer le jeu de données étiqueté dans un fichier CSV
+labelled_dataset.to_csv('new_data/labelled_dataset.csv', index=False, sep=';')
