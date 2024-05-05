@@ -3,7 +3,7 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 from torch.utils.data import Dataset, DataLoader
-
+import torch.nn.functional as F
 # Définir votre classe de dataset personnalisé
 class DatasetPersonnalise(Dataset):
     def __init__(self, csv_file):
@@ -17,7 +17,7 @@ class DatasetPersonnalise(Dataset):
         label = self.data.iloc[idx, -1]  # Récupérer la cible
         # Convertissez l'échantillon et la cible en tenseurs PyTorch si nécessaire
         sample = torch.tensor(sample.values.astype(float))
-        label = torch.tensor(label).long()  # Supposant que votre cible est de type entier (long)
+        label = torch.tensor(label - 1).long()
         return sample, label
 
 # Chemin vers votre dataset CSV personnalisé
@@ -32,42 +32,59 @@ dataset_personnalise = DatasetPersonnalise(fichier_csv)
 taille_lot = 32
 chargeur_donnees = DataLoader(dataset=dataset_personnalise, batch_size=taille_lot, shuffle=True)
 
-# Définir votre modèle
-class MonModele(nn.Module):
-    def __init__(self, input_size, hidden_size, num_classes):
-        super(MonModele, self).__init__()
-        self.fc1 = nn.Linear(input_size, hidden_size)
-        self.relu = nn.ReLU()
-        self.fc2 = nn.Linear(hidden_size, num_classes)
+# for batch_idx, (samples, labels) in enumerate(chargeur_donnees):
+#    print("Batch:", batch_idx)
+#    print("Samples (features):", samples)
+#    print("Labels (targets):", labels)
+ #   print("Batch size:", len(labels))
+  #  print()
+
+class MonCNN(nn.Module):
+    def __init__(self):
+        super(MonCNN, self).__init__()
+        self.conv1 = nn.Conv1d(in_channels=1, out_channels=32, kernel_size=3, stride=1, padding=1).double()
+        self.conv2 = nn.Conv1d(in_channels=32, out_channels=64, kernel_size=3, stride=1, padding=1).double()
+        self.conv3 = nn.Conv1d(in_channels=64, out_channels=128, kernel_size=3, stride=1, padding=1).double()
+        self.pool = nn.MaxPool1d(kernel_size=2, stride=2, padding=0)
+        self.fc1 = nn.Linear(128 * 9, 128).double()  # Ajuster la taille en fonction de la sortie de la dernière couche de convolution
+        self.fc2 = nn.Linear(128, 10).double()  # 10 classes pour la classification des activités
 
     def forward(self, x):
-        # Convertir les données en simple précision
-        x = x.float()
+        x = x.unsqueeze(1)  # Ajouter une dimension pour le canal (batch_size, 1, sequence_length)
+        x = self.pool(F.relu(self.conv1(x)))
+        x = self.pool(F.relu(self.conv2(x)))
+        x = self.pool(F.relu(self.conv3(x)))
+        x = x.view(-1, 128 * 9)  # Ajuster la taille en fonction de la sortie de la dernière couche de convolution
+        x = F.relu(self.fc1(x))
+        x = self.fc2(x)
+        return x
 
-        out = self.fc1(x)
-        out = self.relu(out)
-        out = self.fc2(out)
-        return out
+class SimpleCNN(nn.Module):
+    def __init__(self):
+        super(SimpleCNN, self).__init__()
+        self.conv1 = nn.Conv1d(in_channels=1, out_channels=32, kernel_size=3, stride=1, padding=1).double()
+        self.pool = nn.MaxPool1d(kernel_size=2, stride=2, padding=0)
+        self.fc1 = nn.Linear(32 * 64, 128).double()  # Calculé pour correspondre à la taille de l'entrée
+        self.fc2 = nn.Linear(128, 11).double()  # 11 classes pour la classification
 
-
-# Paramètres du modèle
-input_size = len(dataset_personnalise[0][0])  # Taille de l'entrée du modèle (nombre de fonctionnalités)
-hidden_size = 128  # Taille de la couche cachée
-num_classes = 2  # Nombre de classes de sortie
-
-# Créer une instance de votre modèle
-model = MonModele(input_size, hidden_size, num_classes)
+    def forward(self, x):
+        x = x.unsqueeze(1)  # Ajouter une dimension pour le canal (batch_size, 1, sequence_length)
+        x = self.pool(F.relu(self.conv1(x)))
+        x = x.view(-1, 39936)  # Ajuster la taille en fonction de la sortie de la dernière couche de convolution
+        x = F.relu(self.fc1(x))
+        x = self.fc2(x)
+        return x
+# Créer une instance de votre modèle CNN
+model = SimpleCNN()
 
 # Définir la fonction de perte et l'optimiseur
 criterion = nn.CrossEntropyLoss()
 optimizer = optim.Adam(model.parameters(), lr=0.001)
 
-# Boucle d'entraînement
-num_epochs = 10  # Nombre d'époques d'entraînement
+num_epochs = 10
 for epoch in range(num_epochs):
-    for data, labels in chargeur_donnees:
-        # Passage avant
-        outputs = model(data)
+    for samples, labels in chargeur_donnees:
+        outputs = model(samples)
         loss = criterion(outputs, labels)
 
         # Rétropropagation et mise à jour des poids
@@ -77,3 +94,4 @@ for epoch in range(num_epochs):
 
     # Imprimer la perte à la fin de chaque époque
     print(f'Epoch [{epoch+1}/{num_epochs}], Loss: {loss.item():.4f}')
+

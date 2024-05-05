@@ -58,63 +58,88 @@ len_BricoP = 0
 len_BricoC = 0
 len_Oeuf = 0
 
+# Création du jeu de données étiqueté
+labelled_dataset = pd.DataFrame()  # Initialiser un dataframe pour stocker le jeu de données étiqueté
 # Parcourir les activités dans le calendrier
 for idact, act in enumerate(new_activity_df['activity']):
     start = new_activity_df['Started'][idact]
     end = new_activity_df['Ended'][idact]
-
     # Segmenter la base de données en fonction de chaque activité
     if act == 'Saber':
         segment = base[(base['Time'] >= start) & (base['Time'] <= end)].reset_index(drop=True).sort_values(
             by='Time').drop(columns='Time')
+        segment['label'] = 6
+        labelled_dataset = pd.concat([labelled_dataset, segment], ignore_index=True)
         len_Saber += len(segment)
         Saber_grouped.append(segment)
     elif act == 'Aera':
         segment = base[(base['Time'] >= start) & (base['Time'] <= end)].reset_index(drop=True).sort_values(
             by='Time').drop(columns='Time')
+        segment['label'] = 8
+        labelled_dataset = pd.concat([labelled_dataset, segment], ignore_index=True)
         len_Aera += len(segment)
         Aera_grouped.append(segment)
     elif act == 'Nett':
         segment = base[(base['Time'] >= start) & (base['Time'] <= end)].reset_index(drop=True).sort_values(
             by='Time').drop(columns='Time')
+        segment['label'] = 5
+        labelled_dataset = pd.concat([labelled_dataset, segment], ignore_index=True)
         len_Nett += len(segment)
         Nett_grouped.append(segment)
     elif act == 'Asp':
         segment = base[(base['Time'] >= start) & (base['Time'] <= end)].reset_index(drop=True).sort_values(
             by='Time').drop(columns='Time')
+        segment['label'] = 4
+        labelled_dataset = pd.concat([labelled_dataset, segment], ignore_index=True)
         len_Asp += len(segment)
         Asp_grouped.append(segment)
     elif act == 'AS1':
         segment = base[(base['Time'] >= start) & (base['Time'] <= end)].reset_index(drop=True).sort_values(
             by='Time').drop(columns='Time')
+        segment['label'] = 1
+        labelled_dataset = pd.concat([labelled_dataset, segment], ignore_index=True)
         len_AS1 += len(segment)
         AS1_grouped.append(segment)
     elif act == 'Bougie':
         segment = base[(base['Time'] >= start) & (base['Time'] <= end)].reset_index(drop=True).sort_values(
             by='Time').drop(columns='Time')
+        segment['label'] = 7
+        labelled_dataset = pd.concat([labelled_dataset, segment], ignore_index=True)
         len_Bougie += len(segment)
         Bougie_grouped.append(segment)
     elif act == 'SdB':
         segment = base[(base['Time'] >= start) & (base['Time'] <= end)].reset_index(drop=True).sort_values(
             by='Time').drop(columns='Time')
+        segment['label'] = 3
+        labelled_dataset = pd.concat([labelled_dataset, segment], ignore_index=True)
         len_SdB += len(segment)
         SdB_grouped.append(segment)
     elif act == 'BricoP':
         segment = base[(base['Time'] >= start) & (base['Time'] <= end)].reset_index(drop=True).sort_values(
             by='Time').drop(columns='Time')
+        segment['label'] = 9
+        labelled_dataset = pd.concat([labelled_dataset, segment], ignore_index=True)
         len_BricoP += len(segment)
         BricoP_grouped.append(segment)
     elif act == 'BricoC':
         segment = base[(base['Time'] >= start) & (base['Time'] <= end)].reset_index(drop=True).sort_values(
             by='Time').drop(columns='Time')
+        segment['label'] = 10
+        labelled_dataset = pd.concat([labelled_dataset, segment], ignore_index=True)
         len_BricoC += len(segment)
         BricoC_grouped.append(segment)
     elif act == 'Oeuf':
         segment = base[(base['Time'] >= start) & (base['Time'] <= end)].reset_index(drop=True).sort_values(
             by='Time').drop(columns='Time')
+        segment['label'] = 2
+        labelled_dataset = pd.concat([labelled_dataset, segment], ignore_index=True)
         len_Oeuf += len(segment)
         Oeuf_grouped.append(segment)
     # Ajoutez des clauses elif pour chaque activité supplémentaire
+
+# Enregistrer le jeu de données étiqueté dans un fichier CSV
+labelled_dataset.to_csv('new_data/labelled_dataset.csv', index=False, sep=';')
+
 
 # Vérifier la longueur de chaque activité
 print("Longueur de Saber :", len_Saber)
@@ -190,23 +215,6 @@ plotSignature("BricoP", avg_BricoP)
 plotSignature("BricoC", avg_BricoC)
 plotSignature("Oeuf", avg_Oeuf)
 
-# Création du jeu de données étiqueté
-labelled_dataset = pd.DataFrame()  # Initialiser un dataframe pour stocker le jeu de données étiqueté
 
-for idact, act in enumerate(new_activity_df['activity']):
-    start = new_activity_df['Started'][idact]
-    end = new_activity_df['Ended'][idact]
 
-    # Sélectionner les données correspondant à l'activité actuelle
-    activity_data = base[(base['Time'] >= start) & (base['Time'] <= end)].reset_index(drop=True).sort_values(
-        by='Time').drop(columns='Time')
 
-    # Ajouter une colonne 'label' contenant le numéro de l'activité
-    activity_data[
-        'label'] = idact + 1  # +1 car les numéros d'activité commencent à partir de 1 dans le fichier d'activités
-
-    # Ajouter les données de l'activité au jeu de données étiqueté
-    labelled_dataset = pd.concat([labelled_dataset, activity_data], ignore_index=True)
-
-# Enregistrer le jeu de données étiqueté dans un fichier CSV
-labelled_dataset.to_csv('new_data/labelled_dataset.csv', index=False, sep=';')
